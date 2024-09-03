@@ -1,32 +1,35 @@
-import React from 'react'
+import React from "react";
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Navbar() {
+function NavbarComponent() {
+
+    function logout() {
+        localStorage.removeItem('currentUser');
+        window.location.href = '/login';
+    }
+
     return (
-        <div>
-            <nav class="navbar navbar-expand-lg navbar">
-                <a class="navbar-brand" href="/home">HotelBookingApp</a>
-                <button class="navbar-toggler"
-                 type="button"
-                  data-toggle="collapse"
-                   data-target="#navbarNav"
-                    aria-controls="navbarNav"
-                     aria-expanded="false"
-                      aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/register">Register</a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    )
+        <Navbar expand="lg">
+            <Navbar.Brand href="/home">Shey Rooms</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="ml-auto">
+                    {localStorage.getItem('currentUser') ? (
+                        <NavDropdown title={JSON.parse(localStorage.getItem('currentUser')).name} id="basic-nav-dropdown">
+                            <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                            <NavDropdown.Item href="#" onClick={logout}>Logout</NavDropdown.Item>
+                        </NavDropdown>
+                    ) : (
+                        <>
+                            <Nav.Link href="/register">Register</Nav.Link>
+                            <Nav.Link href="/login">Login</Nav.Link>
+                        </>
+                    )}
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
+    );
 }
 
-export default Navbar
+export default NavbarComponent;
