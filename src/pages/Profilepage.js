@@ -19,7 +19,7 @@ export const MyOrders = () => {
     const fetchBookings = async () => {
       try {
         setloading(true);
-        const { data } = await axios.post("/api/bookings/getuserbookings", {
+        const { data } = await axios.post("webapp-server-iota.vercel.app/api/bookings/getuserbookings", {
           userid: user._id,
         });
         setmybookings(data);
@@ -36,7 +36,7 @@ export const MyOrders = () => {
   const cancelBooking = async (bookingid, roomid) => {
     try {
       setloading(true);
-      await axios.post('/api/bookings/cancelbooking', { bookingid, userid: user._id, roomid });
+      await axios.post('webapp-server-iota.vercel.app/api/bookings/cancelbooking', { bookingid, userid: user._id, roomid });
       setloading(false);
       Swal.fire('Congrats', 'Your Room has been cancelled successfully', 'success').then(() => {
         window.location.href = '/profile';

@@ -31,7 +31,7 @@ export default function Loginpage() {
     }
       try {
         setloading(true)
-        const result = await (await axios.post('/api/users/login',user)).data
+        const result = await (await axios.post('webapp-server-iota.vercel.app/api/users/login',user)).data
         localStorage.setItem('currentUser',JSON.stringify(result))
         window.location.href='/home'
       } catch (error) {
