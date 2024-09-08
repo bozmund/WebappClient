@@ -25,7 +25,7 @@ function Homepage() {
           window.location.href='/login'
         }
         setloading(true)
-        const response = await axios.get('webapp-server-iota.vercel.app/api/rooms/getallrooms')
+        const response = await axios.get('https://webappserver-5c4z.onrender.com/api/rooms/getallrooms')
         sethotels(response.data)
         setduplicatehotes(response.data)
         setloading(false)

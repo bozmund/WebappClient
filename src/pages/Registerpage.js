@@ -27,7 +27,7 @@ export default function RegisterPage() {
           
           try {
             setloading(true)
-            const result = await axios.post('webapp-server-iota.vercel.app/api/users/register',user)
+            const result = await axios.post('https://webappserver-5c4z.onrender.com/api/users/register',user)
             setloading(false)
             setsuccess(true)
             setemail('')

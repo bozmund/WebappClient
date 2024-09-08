@@ -27,7 +27,7 @@ function BookingPage() {
         async function fetchData() {
           try {
             setloading(true);
-            const response = await axios.post("webapp-server-iota.vercel.app/api/rooms/getroombyid", { roomid });
+            const response = await axios.post("https://webappserver-5c4z.onrender.com/api/rooms/getroombyid", { roomid });
             const data = response.data;
             console.log(data);
             setroom(data);
@@ -58,7 +58,7 @@ function BookingPage() {
 
         try {
             setloading(true);
-            const result = await axios.post('webapp-server-iota.vercel.app/api/bookings/bookroom', bookingDetails)
+            const result = await axios.post('https://webappserver-5c4z.onrender.com/api/bookings/bookroom', bookingDetails)
             setloading(false)
             Swal.fire('Congrats', 'Your Room has booked succeessfully', 'success').then(result => {
                 window.location.href = '/profile'
