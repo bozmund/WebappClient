@@ -91,7 +91,6 @@ function Profilescreen() {
           <div>
             <h1>Name : {user.name}</h1>
             <h1>Email : {user.email}</h1>
-            <h1>Admin Access : {user.isAdmin ? "Yes" : "No"}</h1>
           </div>
         </TabPane>
         <TabPane tab="Bookings" key="2">

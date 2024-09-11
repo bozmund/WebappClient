@@ -19,8 +19,8 @@ function BookingPage() {
     const [success, setsuccess] = useState(false)
     const [room, setroom] = useState()
     // const roomid = searchParams.get('roomid');
-    const fromdatemoment = moment(fromdate, 'DD-MM-YYYY');
-    const todatemoment = moment(todate, 'DD-MM-YYYY');
+    const fromdatemoment = moment(fromdate, 'MM-DD-YYYY');
+    const todatemoment = moment(todate, 'MM-DD-YYYY');
     const totalDays = moment.duration(todatemoment.diff(fromdatemoment)).asDays() + 1
     const [totalAmount, settotalAmount] = useState()
     useEffect(() => {
