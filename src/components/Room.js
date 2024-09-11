@@ -1,6 +1,7 @@
 import React, { useState , useEffect } from "react";
 import { Modal, Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { Image } from "react-bootstrap";
 
 function Room({ room, fromdate, todate }) {
   
@@ -11,7 +12,7 @@ function Room({ room, fromdate, todate }) {
   return (
     <div className="row m-3 p-3 bs">
       <div className="col-md-4">
-        <img src={room.imageurls[0]} className="img-fluid" />
+        <Image src={room.imageurls[0]} className="img-fluid" />
       </div>
       <div className="col-md-8">
         <h1>{room.name}</h1>
