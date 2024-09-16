@@ -38,98 +38,133 @@ function Homepage() {
     fetchRooms()
   }, []);
 
-  function filterBySearch()
-  {
-    const dupdate = duplicatehotes.filter(room=>room.name.toLowerCase().includes(searchkey))
+  function filterBySearch() {
+    const dupdate = duplicatehotes.filter(room => room.name.toLowerCase().includes(searchkey))
     sethotels(dupdate)
   }
 
-  function filterByType(e)
-  {
+  function filterByType(e) {
     settype(e)
-    if(e!=='all'){
-      const dupdate = duplicatehotes.filter(room=>room.type.toLowerCase().includes(e.toLowerCase()))
+    if (e !== 'all') {
+      const dupdate = duplicatehotes.filter(room => room.type.toLowerCase().includes(e.toLowerCase()))
       sethotels(dupdate)
     }
-    else{
+    else {
       sethotels(duplicatehotes)
     }
-   
+
+  }
+
+  function switchLetters(str) {
+    if (str.length < 5) {
+      throw new Error("String must be at least 5 characters long");
+    }
+
+    // Extract parts of the string
+    const firstTwo = str.slice(0, 2);
+    const third = str[2];
+    const fourthAndFifth = str.slice(3, 5);
+    const rest = str.slice(5);
+
+    // Switch the letters and concatenate
+    const result = fourthAndFifth[0] + fourthAndFifth[1] + third + firstTwo[0] + firstTwo[1] + rest;
+
+    return result;
+  }
+
+  function parseDate(dateString) {
+    const [day, month, year] = dateString.split('-');
+    // Rearrange to YYYY-MM-DD format
+    const formattedDate = `${year}-${month}-${day}`;
+    const parsedDate = new Date(formattedDate);
+
+    if (isNaN(parsedDate)) {
+      console.error(`Invalid date format: ${dateString}`);
+      return null;
+    }
+
+    return parsedDate;
   }
 
   function filterByDate(dates) {
-    if(dates===null)
-    {
-      hotels=duplicatehotes
-      sethotels(duplicatehotes)
-      return
+    if (dates === null) {
+      hotels = duplicatehotes;
+      sethotels(duplicatehotes);
+      return;
     }
-    const fromDate = moment(dates[0].$d).startOf('day').format('MM-DD-YYYY')
-    const toDate = moment(dates[1].$d).endOf('day').format('MM-DD-YYYY')
-    setfromdate(fromDate)
-    settodate(toDate)
-    
-    var temp=[]
-    for (var room of duplicatehotes) {
-      var availability = false;
-      
-      for (var booking of room.currentbookings) {
-        
-        if(room.currentbookings.length)
-        {
+
+    // Convert the incoming dates to Date objects (parse for 'DD-MM-YYYY')
+    const fromDate = new Date(dates[0]).setHours(0, 0, 0, 0); // Start of the day
+    const toDate = new Date(dates[1]).setHours(0, 0, 0, 0); // End of the day
+
+    if (!fromDate || !toDate) {
+      console.error('Error parsing fromDate or toDate');
+      return;
+    }
+
+    setfromdate(new Date(dates[0]).toISOString().split('T')[0]); // 'YYYY-MM-DD' format
+    settodate(new Date(dates[1]).toISOString().split('T')[0]);
+
+    let temp = [];
+
+    for (let room of duplicatehotes) {
+      let availability = false;
+
+      for (let booking of room.currentbookings) {
+        if (room.currentbookings.length) {
+          let bookingFromdate = parseDate(booking.fromdate).setHours(0, 0, 0, 0);
+          let bookingTodate = parseDate(booking.todate).setHours(0, 0, 0, 0);
+
           if (
-            !moment(fromDate).isBetween(booking.fromdate, booking.todate) &&
-            !moment(toDate).isBetween(booking.fromdate, booking.todate)
+            (fromDate < bookingFromdate && toDate < bookingFromdate) ||  // Before the booking range
+            (fromDate > bookingTodate && toDate > bookingTodate)        // After the booking range
           ) {
-            if (
-              fromDate !== booking.fromdate &&
-              fromDate !== booking.todate &&
-              toDate !== booking.fromdate &&
-              toDate !== booking.todate
-            ) {
-              availability = true;
-            }
+            availability = true;
           }
+          availability = false;
         }
-        
-        
       }
-      if(availability || room.currentbookings.length==0) 
-      {
-        temp.push(room)
+
+      // Add room if available or if no bookings exist
+      if (availability || room.currentbookings.length === 0) {
+        temp.push(room);
       }
     }
-    hotels = temp
-    sethotels(temp)
+
+    sethotels(temp);
+    hotels = temp;
   }
+
+
+
 
   return (
     <div className='container'>
       <div className="row bs p-3 m-5">
-          <div className="col-md-4">
-            <RangePicker style={{ height: "38px" }} onChange={filterByDate} format='DD-MM-YYYY' className='m-2'/>
-          </div>
+        <div className="col-md-4">
+          <RangePicker style={{ height: "38px" }} onChange={filterByDate} format='MM-DD-YYYY' className='m-2' />
+        </div>
 
-          <div className="col-md-4">
-            <input
-              type="text"
-              className="form-control i2 m-2"
-              placeholder='Search Rooms'
-              value={searchkey}
-              onKeyUp={filterBySearch}
-              onChange={(e)=>{setsearchkey(e.target.value)}}
-            />
-          </div>
-          <div className="col-md-4">
-            <select className="form-control m-2" value={type} onChange={(e)=>{filterByType(e.target.value)}} >
+        <div className="col-md-4">
+          <input
+            type="text"
+            className="form-control i2 m-2"
+            placeholder='Search Rooms'
+            value={searchkey}
+            onKeyUp={filterBySearch}
+            onChange={(e) => { setsearchkey(e.target.value) }}
+          />
+        </div>
+        <div className="col-md-4">
+          <select className="form-control m-2" value={type} onChange={(e) => { filterByType(e.target.value) }} >
 
             <option value="all">All</option>
-              <option value="delux">Delux</option>
-              <option value="non-delux">Non Delux</option>
-              
-            </select>
-          </div>
+            <option value="delux">Delux</option>
+            <option value="non-delux">Non Delux</option>
+
+          </select>
         </div>
+      </div>
       <div className='row justify-content-center mt-5'>
         {loading ? (
           <h1>Loading...</h1>

@@ -11,7 +11,7 @@ function NavbarComponent() {
 
     return (
         <Navbar expand="lg">
-            <Navbar.Brand href="/home">Shey Rooms</Navbar.Brand>
+            <Navbar.Brand href="/home">Book Hotel</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
